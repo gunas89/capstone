@@ -32,7 +32,7 @@ pipeline {
         // stage('Deploy') {
         //     steps {
         //         echo 'deploying on another server'
-        //         sh 'sudo docker stop nodetodoapp || true'
+        //         sh ' docker stop nodetodoapp || true'
         //         sh 'sudo docker rm nodetodoapp || true'
         //         sh 'sudo docker run -d --name nodetodoapp -p 80:80 basanagoudapatil/nodo-todo-app-test:latest'
                 
