@@ -11,21 +11,21 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh 'sudo docker build . -t gunas89/test:latest'
+                sh 'docker build . -t gunas89/test:latest'
             }
         }
 
         stage('Test image') {
             steps {
                 echo 'testing…'
-                sh 'sudo docker inspect --type=image gunas89/test:latest'
+                sh 'docker inspect --type=image gunas89/test:latest'
             }
         }
 
         stage('Push') {
             steps {
-                sh "sudo docker login -u gunas89 -p GeekLion@123"
-                sh 'sudo docker push gunas89/test:latest'
+                sh "docker login -u gunas89 -p GeekLion@123"
+                sh 'docker push gunas89/test:latest'
             }
         }
 
