@@ -1,52 +1,51 @@
 pipeline {
     agent any
-
+    
     stages {
         stage('Checkout') {
             steps {
-                // Checkout the code from Git
-                git 'https://github.com/gunas89/capstone.git'
+                git url: 'https://github.com/gunas89/capstone.git', 
+                    branch: 'main'
             }
         }
 
         stage('Build') {
             steps {
-                // Build your Node.js project
-                sh 'npm install'
-                sh 'npm run build'  // Adjust this command based on your build process
+                sh 'sudo docker build . -t gunas89/test:latest'
             }
         }
 
-        stage('Build Docker Image') {
+        stage('Test image') {
             steps {
-                // Build Docker image and tag it
-                script {
-                    dockerImage = docker.build('gunas89/test:latest', '.')
-                }
+                echo 'testing…'
+                sh 'sudo docker inspect --type=image gunas89/test:latest'
             }
         }
 
-        stage('Push to DockerHub') {
+        stage('Push') {
             steps {
-                // Push the Docker image to DockerHub
-                script {
-                    docker.withRegistry('https://registry.hub.docker.com', '5bfd5800-f6af-4d79-a142-c2ea6c0be62f') {
-                        dockerImage.push()
-                    }
-                }
+                sh "sudo docker login -u gunas89 -p GeekLion@123"
+                sh 'sudo docker push gunas89/test:latest'
             }
         }
-    }
 
-    post {
-        success {
-            // Clean up or perform additional steps on successful build
-            echo 'Build and push to DockerHub successful!'
-        }
-
-        failure {
-            // Handle failure scenarios, if needed
-            echo 'Build or push to DockerHub failed!'
-        }
+        // stage('Deploy') {
+        //     steps {
+        //         echo 'deploying on another server'
+        //         sh 'sudo docker stop nodetodoapp || true'
+        //         sh 'sudo docker rm nodetodoapp || true'
+        //         sh 'sudo docker run -d --name nodetodoapp -p 80:80 basanagoudapatil/nodo-todo-app-test:latest'
+                
+        //         sh '''
+        //         ssh -i Ubuntudemo.pem -o StrictHostKeyChecking=no ubuntu@44.211.144.201 <<EOF
+        //             sudo docker login -u basanagoudapatil -p dckr_pat_OvN0lH_USJztUCkm0opyjz-yXNc
+        //             sudo docker pull basanagoudapatil/nodo-todo-app-test:latest
+        //             sudo docker stop nodetodoapp || true
+        //             sudo docker rm nodetodoapp || true
+        //             sudo docker run -d --name nodetodoapp -p 8000:8000 basanagoudapatil/nodo-todo-app-test:latest
+        //         EOF
+        //         '''
+        //     }
+        // }
     }
 }
