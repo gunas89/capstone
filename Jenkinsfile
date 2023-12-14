@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_HUB_CREDENTIALS = credentials('docker-hub-credentials-id')
+        DOCKER_HUB_CREDENTIALS = credentials('5bfd5800-f6af-4d79-a142-c2ea6c0be62f')
     }
 
     stages {
@@ -31,7 +31,7 @@ pipeline {
             steps {
                 script {
                     // Log in to Docker Hub
-                    docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials-id') {
+                    docker.withRegistry('https://registry.hub.docker.com', '5bfd5800-f6af-4d79-a142-c2ea6c0be62f') {
                         // Push Docker image to Docker Hub
                         docker.image('caps-fr').push()
                     }
