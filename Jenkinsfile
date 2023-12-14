@@ -1,42 +1,52 @@
 pipeline {
     agent any
-    tools {NodeJS "nodejs"}
-    environment {
-        DOCKER_HUB_CREDENTIALS = credentials('5bfd5800-f6af-4d79-a142-c2ea6c0be62f')
-    }
 
     stages {
         stage('Checkout') {
             steps {
-                checkout scm
+                // Checkout the code from Git
+                git 'https://github.com/gunas89/capstone.git'
             }
         }
 
-        stage('Build and Dockerize') {
+        stage('Build') {
             steps {
+                // Build your Node.js project
+                sh 'npm install'
+                sh 'npm run build'  // Adjust this command based on your build process
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                // Build Docker image and tag it
                 script {
-                    // Install Node.js dependencies
-                    sh 'npm install'
-
-                    // Run your build script (replace with your build script command)
-                    sh 'npm run build'
-
-                    // Build Docker image
-                    docker.build('caps-fr')
+                    dockerImage = docker.build('gunas89/test:latest', '.')
                 }
             }
         }
 
-        stage('Push to Docker Hub') {
+        stage('Push to DockerHub') {
             steps {
+                // Push the Docker image to DockerHub
                 script {
-                    // Log in to Docker Hub
                     docker.withRegistry('https://registry.hub.docker.com', '5bfd5800-f6af-4d79-a142-c2ea6c0be62f') {
-                        // Push Docker image to Docker Hub
-                        docker.image('caps-fr').push()
+                        dockerImage.push()
                     }
                 }
             }
+        }
+    }
+
+    post {
+        success {
+            // Clean up or perform additional steps on successful build
+            echo 'Build and push to DockerHub successful!'
+        }
+
+        failure {
+            // Handle failure scenarios, if needed
+            echo 'Build or push to DockerHub failed!'
         }
     }
 }
