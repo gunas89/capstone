@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_HUB_CREDENTIAL = credentials('cefe8806-6b88-4129-9219-1d523d632afc')
-        IMAGE_NAME = 'gunas89/test:tagname'
+        NODEJS_HOME = tool 'NodeJS' // Set to the name of your Node.js installation in Jenkins
+        PATH = "$NODEJS_HOME/bin:${env.PATH}"
     }
 
     stages {
@@ -13,33 +13,36 @@ pipeline {
             }
         }
 
-        // stage('Build') {
-        //     steps {
-        //         script {
-        //             // Install Node.js and npm
-        //             tool 'NodeJS'
-        //             sh 'npm config ls'
-        //         }
-        //     }
-        // }
-
-        stage('Docker Build & Push') {
+        stage('Install Dependencies') {
             steps {
                 script {
-                    // Build and push Docker image
-                    withCredentials([string(credentialsId: 'cefe8806-6b88-4129-9219-1d523d632afc', variable: 'DOCKER_HUB_CREDENTIAL')]) {
-                        sh "docker login -u username -p ${DOCKER_HUB_CREDENTIAL}"
-                        sh "docker build -t ${IMAGE_NAME} ."
-                        sh "docker push ${IMAGE_NAME}"
-                    }
+                    // Install Node.js dependencies
+                    sh 'npm install'
                 }
             }
         }
 
+        stage('Run Tests') {
+            steps {
+                script {
+                    // Run tests (replace with your test command)
+                    sh 'npm test'
+                }
+            }
+        }
+
+        // stage('Build') {
+        //     steps {
+        //         script {
+        //             // Your build steps here, e.g., npm run build
+        //         }
+        //     }
+        // }
+
         // stage('Deploy') {
         //     steps {
         //         script {
-        //             // Your deployment steps here, e.g., deploying to a server
+        //             // Your deployment steps here, e.g., deploy to a server
         //         }
         //     }
         // }
