@@ -16,8 +16,8 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    // Your build steps here, e.g., npm install, npm test, etc.
-                    tool 'NodeJS' // Set to the name of your Node.js installation in Jenkins
+                    // Install Node.js and npm
+                    tool 'NodeJS'
                     sh 'npm install'
                 }
             }
@@ -35,5 +35,13 @@ pipeline {
                 }
             }
         }
+
+        // stage('Deploy') {
+        //     steps {
+        //         script {
+        //             // Your deployment steps here, e.g., deploying to a server
+        //         }
+        //     }
+        // }
     }
 }
