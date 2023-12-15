@@ -38,7 +38,7 @@ pipeline {
                 script {
                     // Build and push Docker image
                     withCredentials([string(credentialsId: 'd835b171-f7d1-41bb-ab61-60f83b5d3bc2', variable: 'DOCKER_HUB_CREDENTIAL')]) {
-                        sh "docker login -u username -p ${DOCKER_HUB_CREDENTIAL}"
+                        sh "docker login -u gunas89 -p ${DOCKER_HUB_CREDENTIAL}"
                         sh "docker build -t ${IMAGE_NAME} ."
                         sh "docker push ${IMAGE_NAME}"
                     }
