@@ -15,16 +15,17 @@ pipeline {
 
         stage('Build') {
             steps {
+                // Your build steps here, e.g., npm install, npm test, etc.
                 script {
-                    // Your build steps here, e.g., npm install, npm test, etc.
+                    sh 'npm install'
                 }
             }
         }
 
         stage('Docker Build & Push') {
             steps {
+                // Build and push Docker image
                 script {
-                    // Build and push Docker image
                     withCredentials([string(credentialsId: 'dockerHub', variable: 'DOCKER_HUB_CREDENTIAL')]) {
                         sh "docker login -u username -p ${DOCKER_HUB_CREDENTIAL}"
                         sh "docker build -t ${IMAGE_NAME} ."
