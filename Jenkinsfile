@@ -1,51 +1,43 @@
 pipeline {
     agent any
-    
+
+    environment {
+        DOCKER_HUB_CREDENTIAL = credentials('dockerHub')
+        IMAGE_NAME = 'gunas89/test:tagname'
+    }
+
     stages {
         stage('Checkout') {
             steps {
-                git url: 'https://github.com/gunas89/capstone.git', 
-                    branch: 'main'
+                checkout scm
             }
         }
 
         stage('Build') {
             steps {
-                sh 'docker build . -t gunas89/test:latest'
+                script {
+                    // Your build steps here, e.g., npm install, npm test, etc.
+                }
             }
         }
 
-        stage('Test image') {
+        stage('Docker Build & Push') {
             steps {
-                echo 'testing…'
-                sh 'docker inspect --type=image gunas89/test:latest'
+                script {
+                    // Build and push Docker image
+                    withCredentials([string(credentialsId: 'dockerHub', variable: 'DOCKER_HUB_CREDENTIAL')]) {
+                        sh "docker login -u username -p ${DOCKER_HUB_CREDENTIAL}"
+                        sh "docker build -t ${IMAGE_NAME} ."
+                        sh "docker push ${IMAGE_NAME}"
+                    }
+                }
             }
         }
 
-        stage('Push') {
+        stage('Deploy') {
             steps {
-                sh "docker login -u gunas89 -p GeekLion@123"
-                sh 'docker push gunas89/test:latest'
+                // Your deployment steps here, e.g., deploying to a server
             }
         }
-
-        // stage('Deploy') {
-        //     steps {
-        //         echo 'deploying on another server'
-        //         sh ' docker stop nodetodoapp || true'
-        //         sh 'sudo docker rm nodetodoapp || true'
-        //         sh 'sudo docker run -d --name nodetodoapp -p 80:80 basanagoudapatil/nodo-todo-app-test:latest'
-                
-        //         sh '''
-        //         ssh -i Ubuntudemo.pem -o StrictHostKeyChecking=no ubuntu@44.211.144.201 <<EOF
-        //             sudo docker login -u basanagoudapatil -p dckr_pat_OvN0lH_USJztUCkm0opyjz-yXNc
-        //             sudo docker pull basanagoudapatil/nodo-todo-app-test:latest
-        //             sudo docker stop nodetodoapp || true
-        //             sudo docker rm nodetodoapp || true
-        //             sudo docker run -d --name nodetodoapp -p 8000:8000 basanagoudapatil/nodo-todo-app-test:latest
-        //         EOF
-        //         '''
-        //     }
-        // }
     }
 }
