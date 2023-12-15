@@ -22,29 +22,27 @@ pipeline {
             }
         }
 
-        stage('Run Tests') {
+        stage('Run Build') {
             steps {
                 script {
                     // Run tests (replace with your test command)
                     sh 'npm version'
+                    sh 'ls -ltr'
                 }
             }
         }
 
-        // stage('Build') {
-        //     steps {
-        //         script {
-        //             // Your build steps here, e.g., npm run build
-        //         }
-        //     }
-        // }
-
-        // stage('Deploy') {
-        //     steps {
-        //         script {
-        //             // Your deployment steps here, e.g., deploy to a server
-        //         }
-        //     }
-        // }
+        stage('Docker Build & Push') {
+            steps {
+                script {
+                    // Build and push Docker image
+                    withCredentials([string(credentialsId: 'dockerHub', variable: 'DOCKER_HUB_CREDENTIAL')]) {
+                        sh "docker login -u username -p ${DOCKER_HUB_CREDENTIAL}"
+                        sh "docker build -t ${IMAGE_NAME} ."
+                        sh "docker push ${IMAGE_NAME}"
+                    }
+                }
+            }
+        }
     }
 }
