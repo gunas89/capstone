@@ -13,15 +13,15 @@ pipeline {
             }
         }
 
-        stage('Build') {
-            steps {
-                script {
-                    // Install Node.js and npm
-                    tool 'NodeJS'
-                    sh 'npm config ls'
-                }
-            }
-        }
+        // stage('Build') {
+        //     steps {
+        //         script {
+        //             // Install Node.js and npm
+        //             tool 'NodeJS'
+        //             sh 'npm config ls'
+        //         }
+        //     }
+        // }
 
         stage('Docker Build & Push') {
             steps {
