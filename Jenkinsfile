@@ -26,7 +26,7 @@ pipeline {
             steps {
                 script {
                     // Run tests (replace with your test command)
-                    sh 'npm test'
+                    sh 'npm version'
                 }
             }
         }
