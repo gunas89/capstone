@@ -4,6 +4,7 @@ pipeline {
     environment {
         NODEJS_HOME = tool 'NodeJS' // Set to the name of your Node.js installation in Jenkins
         PATH = "$NODEJS_HOME/bin:${env.PATH}"
+        DOCKER_IMAGE = 'gunas89/test'
     }
 
     stages {
