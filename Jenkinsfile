@@ -37,8 +37,8 @@ pipeline {
             steps {
                 script {
                     // Build and push Docker image
-                    // withCredentials([string(credentialsId: 'd835b171-f7d1-41bb-ab61-60f83b5d3bc2', variable: 'DOCKER_HUB_CREDENTIAL')]) {
-                        sh "docker login -u gunas89 -p GeekLion@123"
+                    withCredentials([string(credentialsId: 'db757c6f-ff70-4ad6-932b-32e72c90a742', variable: 'DOCKER_HUB_CREDENTIAL')]) {
+                        sh "docker login -u gunas89 -p ${DOCKER_HUB_CREDENTIAL}"
                         sh "docker build -t ${IMAGE_NAME} ."
                         sh "docker push ${IMAGE_NAME}"
                     }
