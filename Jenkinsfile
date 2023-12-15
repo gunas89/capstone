@@ -17,6 +17,7 @@ pipeline {
             steps {
                 script {
                     // Your build steps here, e.g., npm install, npm test, etc.
+                    tool 'NodeJS' // Set to the name of your Node.js installation in Jenkins
                     sh 'npm install'
                 }
             }
