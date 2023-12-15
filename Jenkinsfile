@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_HUB_CREDENTIAL = credentials('dockerHub')
+        DOCKER_HUB_CREDENTIAL = credentials('cefe8806-6b88-4129-9219-1d523d632afc')
         IMAGE_NAME = 'gunas89/test:tagname'
     }
 
@@ -27,7 +27,7 @@ pipeline {
             steps {
                 script {
                     // Build and push Docker image
-                    withCredentials([string(credentialsId: 'dockerHub', variable: 'DOCKER_HUB_CREDENTIAL')]) {
+                    withCredentials([string(credentialsId: 'cefe8806-6b88-4129-9219-1d523d632afc', variable: 'DOCKER_HUB_CREDENTIAL')]) {
                         sh "docker login -u username -p ${DOCKER_HUB_CREDENTIAL}"
                         sh "docker build -t ${IMAGE_NAME} ."
                         sh "docker push ${IMAGE_NAME}"
