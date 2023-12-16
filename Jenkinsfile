@@ -5,7 +5,7 @@ pipeline {
         NODEJS_HOME = tool 'NodeJS' // Set to the name of your Node.js installation in Jenkins
         DOCKER_TOOL = tool 'Docker' // Set to the name of your Docker installation in Jenkins
         PATH = "$NODEJS_HOME/bin:${DOCKER_TOOL}:${env.PATH}"
-        DOCKER_IMAGE = 'gunas89/test' // Specify the Docker image name
+        DOCKER_IMAGE = 'gunas89/shippingfr' // Specify the Docker image name
     }
 
     stages {
@@ -24,7 +24,7 @@ pipeline {
             }
         }
 
-        stage('Run Build') {
+        stage('Build Validation') {
             steps {
                 script {
                     // Run tests (replace with your test command)
